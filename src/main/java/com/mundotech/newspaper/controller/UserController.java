@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mundotech.newspaper.entity.User;
 import com.mundotech.newspaper.service.UserService;
 
+import jakarta.validation.Valid;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,9 +31,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user){
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user, @RequestParam List<Integer> rolesIds){
         
-        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED); 
+        return new ResponseEntity<>(userService.createUser(user, rolesIds), HttpStatus.CREATED); 
     }
 
 }
