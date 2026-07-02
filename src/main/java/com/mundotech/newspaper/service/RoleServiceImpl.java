@@ -27,5 +27,4 @@ public class RoleServiceImpl implements RoleService {
         Set<Role> roles = roleRepository.findAllById(rolesIds).stream().collect(Collectors.toSet());
         return roles;
     }
-
 }

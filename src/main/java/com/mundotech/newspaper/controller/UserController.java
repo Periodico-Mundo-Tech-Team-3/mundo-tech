@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
-
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -35,5 +33,4 @@ public class UserController {
         
         return new ResponseEntity<>(userService.createUser(user, rolesIds), HttpStatus.CREATED); 
     }
-
 }

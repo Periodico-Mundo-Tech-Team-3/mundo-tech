@@ -9,6 +9,4 @@ public interface UserService {
     public User createUser(User user, List<Integer> rolesIds);
 
     public User getUserById(int id);
-    
-
 }
