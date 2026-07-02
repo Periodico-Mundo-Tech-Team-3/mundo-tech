@@ -11,4 +11,6 @@ public interface RoleService {
 
     public Set<Role> getAllRoles(List<Integer> rolesIds);
 
+    public List<Role> getAllRoles();
+
 }
