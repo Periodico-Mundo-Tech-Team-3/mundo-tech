@@ -36,4 +36,9 @@ public class UserController {
         return new ResponseEntity<>(userService.createUser(user, rolesIds), HttpStatus.CREATED); 
     }
 
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers(){
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
 }
