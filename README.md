@@ -2,12 +2,21 @@
 
 **Mundo Tech** es una API REST desarrollada con **Spring Boot 3** y **Java 25** como proyecto educativo para aprender los fundamentos de Spring Boot, arquitectura en capas, JPA y relaciones.
 
-Actualmente gestiona **Usuarios** y **Roles** con una relación Many-to-Many, y está diseñada para crecer con funcionalidades como Artículos, flujo de revisión editorial y más.
+Gestiona **Usuarios**, **Roles** (relación Many-to-Many) y **Artículos** (relación Many-to-One con Usuario), y está diseñada para crecer con un flujo de revisión editorial.
 
 ## 📊 Diagrama de entidades
 
 ```mermaid
 erDiagram
+  Article {
+        int id PK
+        varchar title
+        text content
+        date publishDate
+        varchar status
+        int user_id FK
+    }
+
     User {
         int id PK
         varchar name
@@ -20,16 +29,23 @@ erDiagram
         varchar role
     }
 
+  
+
     user_roles {
         int user_id FK
         int role_id FK
     }
 
+    User ||--o{ Article : escribe
     User ||--o{ user_roles : tiene
     Role ||--o{ user_roles : pertenece
+    
 ```
 
 **User** y **Role** se relacionan Many-to-Many mediante la tabla intermedia `user_roles`.
+**User** y **Article** se relacionan One-to-Many: un usuario puede tener varios artículos.
+
+Además, `Article` incluye un campo `status` de tipo `EstadoDocumento` que puede ser `DRAFT`, `IN_REVIEW` o `PUBLISHED`.
 
 ## 🛠️ Tech Stack
 
@@ -48,19 +64,24 @@ erDiagram
 src/main/java/com/mundotech/newspaper/
 ├── NewspaperApplication.java
 ├── controller/
-│   ├── UserController.java        # /api/v1/users
-│   └── RoleController.java        # /api/v1/roles
+│   ├── ArticleController.java     # /api/v1/articles
+│   ├── RoleController.java        # /api/v1/roles
+│   └── UserController.java        # /api/v1/users
 ├── entity/
-│   ├── User.java
-│   └── Role.java
+│   ├── Article.java
+│   ├── Role.java
+│   └── User.java
 ├── repository/
-│   ├── UserRepository.java
-│   └── RoleRepository.java
+│   ├── ArticleRepository.java
+│   ├── RoleRepository.java
+│   └── UserRepository.java
 └── service/
-    ├── UserService.java
-    ├── UserServiceImpl.java
+    ├── ArticleService.java
+    ├── ArticleServiceImpl.java
     ├── RoleService.java
-    └── RoleServiceImpl.java
+    ├── RoleServiceImpl.java
+    ├── UserService.java
+    └── UserServiceImpl.java
 ```
 
 ## 📋Prerrequisitos
@@ -80,11 +101,13 @@ cp .env.example .env
 
 ## 🔌 API Endpoints
 
-| Método | Ruta               | Descripción                     |
-|--------|--------------------|---------------------------------|
-| POST   | /api/v1/users      | Crear usuario con roles         |
-| GET    | /api/v1/users/{id} | Obtener usuario por ID          |
-| POST   | /api/v1/roles      | Crear un rol                    |
+| Método | Ruta                         | Descripción                     |
+|--------|------------------------------|---------------------------------|
+| POST   | /api/v1/users?rolesIds=      | Crear usuario con roles         |
+| GET    | /api/v1/users                | Obtener todos los usuarios      |
+| POST   | /api/v1/roles                | Crear un rol                    |
+| GET    | /api/v1/roles                | Obtener todos los roles         |
+| POST   | /api/v1/articles/{userId}    | Crear artículo asociado a un usuario |
 
 ## 🗄️ Configuración de BD
 
@@ -100,16 +123,10 @@ Para usar **H2** en desarrollo, descomenta la configuración en `application.pro
 
 ## 🗺️ Próximos pasos (roadmap)
 
-### Fase 1 — Entidad Article y ArticleStatus
-- Enum `ArticleStatus` con valores `DRAFT`, `IN_REVIEW`, `PUBLISHED`
-- Entidad `Article` con relación `@ManyToOne` a `User` (autor)
-- Eliminación en cascada: al borrar un usuario se borran sus artículos
-
-### Fase 2 — CRUD de artículos
+### Fase 2 — CRUD de artículos (completar)
 
 | Método | Ruta                          | Descripción                        |
 |--------|-------------------------------|------------------------------------|
-| POST   | /api/v1/articles              | Crear artículo (status DRAFT)      |
 | GET    | /api/v1/articles              | Listar todos                       |
 | GET    | /api/v1/articles/{id}         | Obtener por ID                     |
 | GET    | /api/v1/articles?author={id}  | Buscar por autor                   |
@@ -123,7 +140,6 @@ Para usar **H2** en desarrollo, descomenta la configuración en `application.pro
 - Endpoints para listar por estado: `/articles/status/draft`, `/in-review`, `/published`
 
 ### Fase 4 — Validaciones y calidad
-- Jakarta Validation en DTOs
 - `@ControllerAdvice` para manejo global de excepciones
 - DTOs request/response
 - Tests con JUnit 5 y colección de Postman
