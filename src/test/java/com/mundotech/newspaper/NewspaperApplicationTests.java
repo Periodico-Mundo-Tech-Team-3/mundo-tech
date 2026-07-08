@@ -9,5 +9,4 @@ class NewspaperApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

@@ -21,6 +21,4 @@ public class Role {
 
     @Column(nullable = false,unique = true)
     private String role;
-
 }
-

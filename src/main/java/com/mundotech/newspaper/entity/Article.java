@@ -53,4 +53,3 @@ enum EstadoDocumento {
     IN_REVIEW,
     PUBLISHED
 }
-

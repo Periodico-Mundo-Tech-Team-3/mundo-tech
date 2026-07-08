@@ -21,5 +21,4 @@ public class ArticleServiceImpl implements ArticleService {
         article.setUser(userService.getUserById(userId));
         return articleRepository.save(article);
     }
-
 }

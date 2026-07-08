@@ -18,9 +18,5 @@ public class NewspaperApplication {
             (ApplicationContextInitializer<ConfigurableApplicationContext>) ctx -> DotenvPropertySource
                 .addToEnvironment(ctx.getEnvironment(), DotenvConfig.defaults()))
         .run(args);
-    
-    
-
   }
-
 }
