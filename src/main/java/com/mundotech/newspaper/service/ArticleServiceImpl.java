@@ -28,5 +28,4 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.save(article);
         
     }
-
 }

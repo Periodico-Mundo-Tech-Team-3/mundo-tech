@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-
-
 import org.springframework.stereotype.Service;
 
 import com.mundotech.newspaper.entity.Role;
@@ -29,7 +27,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
         return userRepository.save(user);
     }
-// Este metodo se usará cuando se realice la creación del artículo para ver si existe el usuario
+// Este método se usará cuando se realice la creación del artículo para ver si existe el usuario
     @Override
     public User getUserById(int id) {
         Optional<User> user = userRepository.findById(id);
@@ -37,12 +35,10 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("No existe ese usuario");
         }
         return user.get();
-      
     }
 
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-
 }
