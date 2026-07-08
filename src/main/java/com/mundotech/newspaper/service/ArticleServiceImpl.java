@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.mundotech.newspaper.entity.Article;
 import com.mundotech.newspaper.repository.ArticleRepository;
+import com.mundotech.newspaper.entity.ArticleStatus;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -18,6 +19,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article createArticle(Article article, int userId) {
+        article.setStatus(ArticleStatus.DRAFT);
         article.setUser(userService.getUserById(userId));
         return articleRepository.save(article);
     }

@@ -40,7 +40,7 @@ public class Article {
     private Date publishDate;
 
     @Enumerated(EnumType.STRING)
-    private EstadoDocumento status;
+    private ArticleStatus status;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -48,9 +48,9 @@ public class Article {
     private User user;
 }
 
-enum EstadoDocumento {
-    DRAFT,
-    IN_REVIEW,
-    PUBLISHED
-}
+// enum EstadoDocumento {
+//     DRAFT,
+//     IN_REVIEW,
+//     PUBLISHED
+// }
 
