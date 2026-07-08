@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.mundotech.newspaper.entity.Article;
 import com.mundotech.newspaper.repository.ArticleRepository;
+import com.mundotech.newspaper.entity.ArticleStatus;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -18,8 +19,13 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article createArticle(Article article, int userId) {
+        if(!userService.getUserById(userId).getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("author"))){
+            throw new IllegalArgumentException("El usuario no tiene el rol AUTHOR y no puede crear artículos.");
+        }
+
+        article.setStatus(ArticleStatus.DRAFT);
         article.setUser(userService.getUserById(userId));
         return articleRepository.save(article);
+        
     }
-
 }

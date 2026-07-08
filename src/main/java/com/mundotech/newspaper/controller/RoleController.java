@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
-
 @RestController
 @RequestMapping("/api/v1/roles")
 public class RoleController {
@@ -37,5 +35,4 @@ public class RoleController {
     public ResponseEntity<List<Role>> getAllRoles(){
         return new ResponseEntity<>(roleService.getAllRoles(), HttpStatus.OK);
     }
-    
 }
