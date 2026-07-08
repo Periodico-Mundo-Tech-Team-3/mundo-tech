@@ -19,9 +19,14 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article createArticle(Article article, int userId) {
+        if(!userService.getUserById(userId).getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("author"))){
+            throw new IllegalArgumentException("El usuario no tiene el rol AUTHOR y no puede crear artículos.");
+        }
+
         article.setStatus(ArticleStatus.DRAFT);
         article.setUser(userService.getUserById(userId));
         return articleRepository.save(article);
+        
     }
 
 }
