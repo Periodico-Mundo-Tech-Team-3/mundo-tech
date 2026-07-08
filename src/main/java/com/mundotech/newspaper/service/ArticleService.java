@@ -8,4 +8,6 @@ public interface ArticleService {
     public Article createArticle(Article article, int userId);
 
     public List<Article> getAllArticles();
+
+    public Article getArticleById(int id);
 }

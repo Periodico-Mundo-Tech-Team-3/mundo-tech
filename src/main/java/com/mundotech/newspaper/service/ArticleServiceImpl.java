@@ -1,6 +1,7 @@
 package com.mundotech.newspaper.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -38,5 +39,14 @@ public class ArticleServiceImpl implements ArticleService {
             throw new RuntimeException("No existen articulos");
         }
         return articles;
+    }
+
+    @Override
+    public Article getArticleById(int id) {
+         Optional<Article> article=articleRepository.findById(id);
+        if(article.isEmpty()){
+            throw new RuntimeException("No existe ese articulo");
+        }
+        return article.get();
     }
 }

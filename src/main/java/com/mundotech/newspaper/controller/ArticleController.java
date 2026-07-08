@@ -36,4 +36,9 @@ public class ArticleController {
     public ResponseEntity<List<Article>> getAllArticles(){
         return new ResponseEntity<>(articleService.getAllArticles(), HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Article> getArticleById(@PathVariable int id){
+        return new ResponseEntity<>(articleService.getArticleById(id), HttpStatus.OK);
+    }
 }
