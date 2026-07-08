@@ -1,5 +1,7 @@
 package com.mundotech.newspaper.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.mundotech.newspaper.entity.Article;
@@ -27,5 +29,14 @@ public class ArticleServiceImpl implements ArticleService {
         article.setUser(userService.getUserById(userId));
         return articleRepository.save(article);
         
+    }
+
+    @Override
+    public List<Article> getAllArticles() {
+        List<Article> articles = articleRepository.findAll();
+        if(articles.isEmpty()){
+            throw new RuntimeException("No existen articulos");
+        }
+        return articles;
     }
 }
