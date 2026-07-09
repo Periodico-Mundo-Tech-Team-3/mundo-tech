@@ -21,7 +21,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; 
 
-    @Column(nullable = false,unique = true, length = 50)
+    @Column(nullable = false,unique = true , length = 50)
     @NotBlank(message = "El nombre no puede estar vacío")
     @Size(max = 50, message = "El nombre no puede superar los 50 caracteres")
     private String name;

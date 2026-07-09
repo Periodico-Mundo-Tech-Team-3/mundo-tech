@@ -3,6 +3,7 @@ package com.mundotech.newspaper.dto.request;
 import java.util.Date;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record ArticleDto(
@@ -15,7 +16,7 @@ public record ArticleDto(
     @Size(max = 10000, message = "El contenido no puede pasar de los 10.000 caracteres")
     String content,
 
-    @NotBlank
+    @NotNull
     Date publishDate
 ) {
 
