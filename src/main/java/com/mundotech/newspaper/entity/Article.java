@@ -16,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,16 +30,19 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
-    @Column(nullable = false)
+    //@NotBlank
+    @Column(nullable = false, length = 100)
+    //@Size(max = 100, message = "El título no puede pasar de los 100 caracteres")
     private String title;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT",  length = 10000)
+    //@Size(max = 10000, message = "El contenido no puede pasar de los 10.000 caracteres")
     private String content;
 
     @Column(nullable = false)
     private Date publishDate;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ArticleStatus status;
 
@@ -47,10 +51,4 @@ public class Article {
     @JoinColumn(name = "user_id", nullable = true, referencedColumnName = "id")
     private User user;
 }
-
-// enum EstadoDocumento {
-//     DRAFT,
-//     IN_REVIEW,
-//     PUBLISHED
-// }
 

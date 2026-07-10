@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mundotech.newspaper.dto.request.ArticleDto;
+import com.mundotech.newspaper.dto.response.ArticleInfoDto;
 import com.mundotech.newspaper.entity.Article;
+import com.mundotech.newspaper.mapper.ArticleMapper;
 import com.mundotech.newspaper.service.ArticleService;
 
 import jakarta.validation.Valid;
@@ -22,23 +24,29 @@ import jakarta.validation.Valid;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final ArticleMapper articleMapper;
 
-    public ArticleController(ArticleService articleservice){
+    public ArticleController(ArticleService articleservice, ArticleMapper articleMapper){
         this.articleService = articleservice;
+        this.articleMapper = articleMapper;
     }
     
     @PostMapping("/{userId}")
-    ResponseEntity<Article> createArticle(@Valid @RequestBody Article article,  @PathVariable int userId) {
-        return new ResponseEntity<>(articleService.createArticle(article, userId), HttpStatus.CREATED);
+    ResponseEntity<ArticleInfoDto> createArticle(@Valid @RequestBody ArticleDto articleDto, @PathVariable int userId) {
+        Article article = articleMapper.toArticleEntity(articleDto);
+        ArticleInfoDto response = articleMapper.toArticleInfoDto(articleService.createArticle(article, userId));
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Article>> getAllArticles(){
-        return new ResponseEntity<>(articleService.getAllArticles(), HttpStatus.OK);
+    public ResponseEntity<List<ArticleInfoDto>> getAllArticles(){
+        List<ArticleInfoDto> responses = articleMapper.toArticleResponseList(articleService.getAllArticles());
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Article> getArticleById(@PathVariable int id){
-        return new ResponseEntity<>(articleService.getArticleById(id), HttpStatus.OK);
+    public ResponseEntity<ArticleInfoDto> getArticleById(@PathVariable int id){
+        ArticleInfoDto response = articleMapper.toArticleInfoDto(articleService.getArticleById(id));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
