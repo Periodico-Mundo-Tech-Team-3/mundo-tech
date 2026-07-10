@@ -10,4 +10,6 @@ public interface ArticleService {
     public List<Article> getAllArticles();
 
     public Article getArticleById(int id);
+
+    public List<Article> getArticlesByUserId(int userId);
 }

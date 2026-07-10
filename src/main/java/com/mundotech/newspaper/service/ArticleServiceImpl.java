@@ -9,6 +9,8 @@ import com.mundotech.newspaper.entity.Article;
 import com.mundotech.newspaper.repository.ArticleRepository;
 import com.mundotech.newspaper.entity.ArticleStatus;
 
+import com.mundotech.newspaper.entity.User;
+
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
@@ -49,4 +51,14 @@ public class ArticleServiceImpl implements ArticleService {
         }
         return article.get();
     }
+
+    @Override
+    public List<Article> getArticlesByUserId(int userId) {
+        User user = userService.getUserById(userId);
+         if(user==null){
+            throw new RuntimeException("No existe ese usuario");
+        }
+        return articleRepository.findByUserId(userId);
+    }
 }
+
