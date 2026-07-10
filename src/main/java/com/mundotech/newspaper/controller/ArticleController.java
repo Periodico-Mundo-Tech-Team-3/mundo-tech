@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mundotech.newspaper.dto.request.ArticleDto;
@@ -49,4 +50,15 @@ public class ArticleController {
         ArticleInfoDto response = articleMapper.toArticleInfoDto(articleService.getArticleById(id));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    
+    //@GetMapping("/author/{userId}")
+    //public ResponseEntity<List<ArticleInfoDto>> getArticlesByUserId(@PathVariable int userId) {
+    @GetMapping("/author")
+    public ResponseEntity<List<ArticleInfoDto>> getArticlesByUserId(@RequestParam int authorId) {
+    List<ArticleInfoDto> responses =
+            articleMapper.toArticleResponseList(articleService.getArticlesByUserId(authorId));
+    return new ResponseEntity<>(responses, HttpStatus.OK);
+}
+
 }
