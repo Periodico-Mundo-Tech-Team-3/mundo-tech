@@ -34,13 +34,9 @@ public class User {
     private Integer id;
 
     @Column(nullable = false, length = 50)
-    //@NotBlank(message = "El nombre no puede estar vacío")
-    //@Size(max = 50, message = "El nombre no puede superar los 50 caracteres")
     private String name;
 
     @Column(nullable = false,unique = true)
-    //@NotBlank
-    //@Email
     private String email;
 
     @Column(nullable = false)

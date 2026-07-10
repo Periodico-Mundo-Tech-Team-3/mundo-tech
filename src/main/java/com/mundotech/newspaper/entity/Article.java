@@ -28,13 +28,10 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    //@NotBlank
     @Column(nullable = false, length = 100)
-    //@Size(max = 100, message = "El título no puede pasar de los 100 caracteres")
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT",  length = 10000)
-    //@Size(max = 10000, message = "El contenido no puede pasar de los 10.000 caracteres")
     private String content;
 
     @Column(nullable = false)
