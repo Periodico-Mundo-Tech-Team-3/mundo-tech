@@ -24,12 +24,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article createArticle(Article article, int userId) {
-        if(!userService.getUserById(userId).getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("author"))){
+        if(!userService.getUserEntityById(userId).getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("author"))){
             throw new IllegalArgumentException("El usuario no tiene el rol AUTHOR y no puede crear artículos.");
         }
 
         article.setStatus(ArticleStatus.DRAFT);
-        article.setUser(userService.getUserById(userId));
+        article.setUser(userService.getUserEntityById(userId));
         return articleRepository.save(article);
         
     }
@@ -54,7 +54,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> getArticlesByUserId(int userId) {
-        User user = userService.getUserById(userId);
+        User user = userService.getUserEntityById(userId);
          if(user==null){
             throw new RuntimeException("No existe ese usuario");
         }
