@@ -1,5 +1,6 @@
 package com.mundotech.newspaper.mapper;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
@@ -26,5 +27,11 @@ public class RoleMapper {
         return roles.stream()
             .map(this::toRoleInfoDto)
             .collect(Collectors.toSet());
+    }
+
+    public List<RoleInfoDto> toRoleInfoDtoList(List<Role> roles){
+        return roles.stream()
+            .map(this::toRoleInfoDto)
+            .collect(Collectors.toList());
     }
 }

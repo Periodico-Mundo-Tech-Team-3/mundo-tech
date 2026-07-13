@@ -53,13 +53,11 @@ public class ArticleController {
     }
 
     
-    //@GetMapping("/author/{userId}")
-    //public ResponseEntity<List<ArticleInfoDto>> getArticlesByUserId(@PathVariable int userId) {
     @GetMapping("/author")
     public ResponseEntity<List<ArticleInfoDto>> getArticlesByUserId(@RequestParam int authorId) {
-    List<ArticleInfoDto> responses =
+        List<ArticleInfoDto> responses =
             articleMapper.toArticleResponseList(articleService.getArticlesByUserId(authorId));
-    return new ResponseEntity<>(responses, HttpStatus.OK);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
     @PutMapping("/{id}/{userLoginId}")

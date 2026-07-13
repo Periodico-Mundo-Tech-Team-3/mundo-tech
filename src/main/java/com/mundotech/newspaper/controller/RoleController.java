@@ -1,7 +1,6 @@
 package com.mundotech.newspaper.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +37,7 @@ public class RoleController {
 
     @GetMapping()
     public ResponseEntity<List<RoleInfoDto>> getAllRoles(){
-        List<RoleInfoDto> responses = roleService.getAllRoles().stream()
-            .map(roleMapper::toRoleInfoDto)
-            .collect(Collectors.toList());
+        List<RoleInfoDto> responses = roleService.getAllRoles();
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 }
