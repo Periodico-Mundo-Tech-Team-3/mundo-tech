@@ -4,16 +4,16 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mundotech.newspaper.dto.request.UserDto;
 import com.mundotech.newspaper.dto.response.UserInfoDto;
-//import com.mundotech.newspaper.dto.response.UserResponse;
 import com.mundotech.newspaper.entity.User;
 import com.mundotech.newspaper.mapper.UserMapper;
 import com.mundotech.newspaper.service.UserService;
@@ -51,5 +51,11 @@ public class UserController {
             .map(userMapper::toUserInfoDto)
             .toList();
         return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserInfoDto> deleteUser(@PathVariable int id) {
+        userService.deleteUserById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

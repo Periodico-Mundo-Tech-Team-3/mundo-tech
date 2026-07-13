@@ -10,4 +10,6 @@ public interface UserService {
     public User getUserById(int id);
     
     public List<User> getAllUsers();
+
+    public void deleteUserById(int id);
 }
