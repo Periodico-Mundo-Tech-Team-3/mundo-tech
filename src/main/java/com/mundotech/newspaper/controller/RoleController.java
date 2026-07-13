@@ -1,7 +1,6 @@
 package com.mundotech.newspaper.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mundotech.newspaper.dto.response.RoleInfoDto;
 import com.mundotech.newspaper.entity.Role;
-import com.mundotech.newspaper.mapper.RoleMapper;
 import com.mundotech.newspaper.service.RoleService;
 
 import jakarta.validation.Valid;
@@ -23,24 +21,20 @@ import jakarta.validation.Valid;
 public class RoleController {
 
     private final RoleService roleService;
-    private final RoleMapper roleMapper;
 
-    public RoleController(RoleService roleService, RoleMapper roleMapper){
+    public RoleController(RoleService roleService){
         this.roleService = roleService;
-        this.roleMapper = roleMapper;
     }
 
     @PostMapping
-    public ResponseEntity<RoleInfoDto> createRole(@Valid @RequestBody Role role){
-        RoleInfoDto response = roleMapper.toRoleInfoDto(roleService.createRole(role));
+    public ResponseEntity<Role> createRole(@Valid @RequestBody Role role){
+        Role response = roleService.createRole(role);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping()
     public ResponseEntity<List<RoleInfoDto>> getAllRoles(){
-        List<RoleInfoDto> responses = roleService.getAllRoles().stream()
-            .map(roleMapper::toRoleInfoDto)
-            .collect(Collectors.toList());
+        List<RoleInfoDto> responses = roleService.getAllRoles();
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 }

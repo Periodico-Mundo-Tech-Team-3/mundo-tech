@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mundotech.newspaper.dto.request.ArticleDto;
 import com.mundotech.newspaper.dto.response.ArticleInfoDto;
-import com.mundotech.newspaper.entity.Article;
-import com.mundotech.newspaper.mapper.ArticleMapper;
 import com.mundotech.newspaper.service.ArticleService;
 
 import jakarta.validation.Valid;
@@ -26,47 +24,41 @@ import jakarta.validation.Valid;
 public class ArticleController {
 
     private final ArticleService articleService;
-    private final ArticleMapper articleMapper;
 
-    public ArticleController(ArticleService articleservice, ArticleMapper articleMapper){
+    public ArticleController(ArticleService articleservice){
         this.articleService = articleservice;
-        this.articleMapper = articleMapper;
     }
     
     @PostMapping("/{userId}")
     ResponseEntity<ArticleInfoDto> createArticle(@Valid @RequestBody ArticleDto articleDto, @PathVariable int userId) {
-        Article article = articleMapper.toArticleEntity(articleDto);
-        ArticleInfoDto response = articleMapper.toArticleInfoDto(articleService.createArticle(article, userId));
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        ArticleInfoDto articleInfoDto = articleService.createArticle(articleDto, userId);
+        return new ResponseEntity<>(articleInfoDto, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<ArticleInfoDto>> getAllArticles(){
-        List<ArticleInfoDto> responses = articleMapper.toArticleResponseList(articleService.getAllArticles());
-        return new ResponseEntity<>(responses, HttpStatus.OK);
+        List<ArticleInfoDto> listArticleInfoDto = articleService.getAllArticles();
+        return new ResponseEntity<>(listArticleInfoDto, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ArticleInfoDto> getArticleById(@PathVariable int id){
-        ArticleInfoDto response = articleMapper.toArticleInfoDto(articleService.getArticleById(id));
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        ArticleInfoDto articleInfoDto = articleService.getArticleById(id);
+        return new ResponseEntity<>(articleInfoDto, HttpStatus.OK);
     }
 
     
-    //@GetMapping("/author/{userId}")
-    //public ResponseEntity<List<ArticleInfoDto>> getArticlesByUserId(@PathVariable int userId) {
     @GetMapping("/author")
     public ResponseEntity<List<ArticleInfoDto>> getArticlesByUserId(@RequestParam int authorId) {
-    List<ArticleInfoDto> responses =
-            articleMapper.toArticleResponseList(articleService.getArticlesByUserId(authorId));
-    return new ResponseEntity<>(responses, HttpStatus.OK);
+        List<ArticleInfoDto> listArticleInfoDto = articleService.getArticlesByUserId(authorId);
+        return new ResponseEntity<>(listArticleInfoDto, HttpStatus.OK);
     }
 
     @PutMapping("/{id}/{userLoginId}")
-    public ResponseEntity<ArticleInfoDto> updateArticle(@PathVariable Integer id,@PathVariable Integer userLoginId, @Valid @RequestBody Article article){
-        ArticleInfoDto articleDto=articleMapper.toArticleInfoDto(articleService.updateArticle(id,userLoginId, article));
+    public ResponseEntity<ArticleInfoDto> updateArticle(@PathVariable Integer id,@PathVariable Integer userLoginId, @Valid @RequestBody ArticleDto article){
+        ArticleInfoDto articleInfoDto = articleService.updateArticle(id,userLoginId, article);
 
-        return new ResponseEntity<>(articleDto, HttpStatus.OK);
+        return new ResponseEntity<>(articleInfoDto, HttpStatus.OK);
     }
 
 }

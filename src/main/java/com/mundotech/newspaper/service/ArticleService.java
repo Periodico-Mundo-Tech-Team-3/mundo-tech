@@ -2,16 +2,20 @@ package com.mundotech.newspaper.service;
 
 import java.util.List;
 
+import com.mundotech.newspaper.dto.request.ArticleDto;
+import com.mundotech.newspaper.dto.response.ArticleInfoDto;
 import com.mundotech.newspaper.entity.Article;
 
 public interface ArticleService {
-    public Article createArticle(Article article, int userId);
+    public ArticleInfoDto createArticle(ArticleDto article, int userId);
 
-    public List<Article> getAllArticles();
+    public List<ArticleInfoDto> getAllArticles();
 
-    public Article getArticleById(int id);
+    public ArticleInfoDto getArticleById(int id);
 
-    public List<Article> getArticlesByUserId(int userId);
+    public Article getArticleEntityById(int id);
 
-    public Article updateArticle(Integer id,Integer userLoginId, Article article);
+    public List<ArticleInfoDto> getArticlesByUserId(int userId);
+
+    public ArticleInfoDto updateArticle(Integer id,Integer userLoginId, ArticleDto article);
 }
