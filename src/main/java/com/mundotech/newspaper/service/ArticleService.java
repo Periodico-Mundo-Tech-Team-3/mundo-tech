@@ -12,4 +12,6 @@ public interface ArticleService {
     public Article getArticleById(int id);
 
     public List<Article> getArticlesByUserId(int userId);
+
+    public Article updateArticle(Integer id,Integer userLoginId, Article article);
 }

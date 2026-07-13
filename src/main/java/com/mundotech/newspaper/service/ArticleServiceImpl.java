@@ -60,5 +60,18 @@ public class ArticleServiceImpl implements ArticleService {
         }
         return articleRepository.findByUserId(userId);
     }
+
+    @Override
+    public Article updateArticle(Integer id,Integer userLoginId, Article article) {
+        //para validar la autoria del articulo debo pasar el userid logeado como parámetro
+        Article articleAct=getArticleById(id);
+        // La validación del solicitante es el autor
+    if (articleAct.getUser() == null || articleAct.getUser().getId() != userLoginId) {
+        throw new RuntimeException("No puedes editar un artículo que no es tuyo.");
+    }
+        articleAct.setTitle(article.getTitle());
+        articleAct.setContent(article.getContent());
+        return articleRepository.save(articleAct);  
+    }
 }
 
