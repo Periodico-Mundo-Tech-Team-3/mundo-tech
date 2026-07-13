@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mundotech.newspaper.dto.response.UserInfoDto;
 import com.mundotech.newspaper.entity.User;
-import com.mundotech.newspaper.mapper.UserMapper;
 import com.mundotech.newspaper.service.UserService;
 
 import jakarta.validation.Valid;
@@ -25,11 +24,9 @@ import jakarta.validation.Valid;
 public class UserController {
     
     private final UserService userService;
-    private final UserMapper userMapper;
 
-    public UserController(UserService userService, UserMapper userMapper){
+    public UserController(UserService userService){
             this.userService = userService;
-            this.userMapper = userMapper; 
     }
 
     // @PostMapping

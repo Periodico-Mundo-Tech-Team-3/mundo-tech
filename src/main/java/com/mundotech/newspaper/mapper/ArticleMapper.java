@@ -41,7 +41,7 @@ public class ArticleMapper {
         );
     }
 
-    public List<ArticleInfoDto> toArticleResponseList(List<Article> articles){
+    public List<ArticleInfoDto> toArticleInfoDtoList(List<Article> articles){
         return articles.stream()
             .map(this::toArticleInfoDto)
             .toList();

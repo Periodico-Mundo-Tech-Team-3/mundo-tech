@@ -43,7 +43,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserEntityById(int id) {
-        return userRepository.findById(id).get();
+        Optional<User> user = userRepository.findById(id);
+        if(user.isEmpty()){
+            throw new RuntimeException("No existe ese usuario");
+        }
+        return user.get();
     }
 
     @Override
