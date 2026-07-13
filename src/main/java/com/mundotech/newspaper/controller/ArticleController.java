@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,6 +60,13 @@ public class ArticleController {
     List<ArticleInfoDto> responses =
             articleMapper.toArticleResponseList(articleService.getArticlesByUserId(authorId));
     return new ResponseEntity<>(responses, HttpStatus.OK);
-}
+    }
+
+    @PutMapping("/{id}/{userLoginId}")
+    public ResponseEntity<ArticleInfoDto> updateArticle(@PathVariable Integer id,@PathVariable Integer userLoginId, @Valid @RequestBody Article article){
+        ArticleInfoDto articleDto=articleMapper.toArticleInfoDto(articleService.updateArticle(id,userLoginId, article));
+
+        return new ResponseEntity<>(articleDto, HttpStatus.OK);
+    }
 
 }
