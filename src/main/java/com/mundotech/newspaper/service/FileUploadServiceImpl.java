@@ -17,9 +17,8 @@ import org.springframework.util.StringUtils;
 
 import com.mundotech.newspaper.dto.response.FileUploadResponseDto;
 
-
 @Service
-public class FileUploadSrrviceImpl implements FileUploadService {
+public class FileUploadServiceImpl implements FileUploadService {
 
     private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png", "webp", "gif");
     private static final List<String> ALLOWED_MIME_TYPES = Arrays.asList("image/jpeg", "image/png", "image/webp", "image/gif");
@@ -61,9 +60,7 @@ public class FileUploadSrrviceImpl implements FileUploadService {
         }
 
         try {
-
             //String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
-
             String filename = UUID.randomUUID() + "_" + originalFilename;
 
             Path directory = Paths.get(uploadPath);
@@ -76,17 +73,17 @@ public class FileUploadSrrviceImpl implements FileUploadService {
 
             Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
+            String fileUrl = "/uploads/" + filename;
+
             return new FileUploadResponseDto(
                     filename,
                     file.getContentType(),
                     file.getSize(),
-                    destination.toString()
+                    fileUrl
             );
 
         } catch (IOException e) {
             throw new RuntimeException("Error uploading file", e);
         }
-       
     }
-
 }

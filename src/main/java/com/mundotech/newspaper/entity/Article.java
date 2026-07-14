@@ -51,6 +51,9 @@ public class Article {
     @Column
     private Long tamano;
 
+    @Column(name = "image")
+    private String image;
+
     //si se guarda el fichero en la base de datos, se debe cambiar el tipo de dato a byte[] y quitar la anotación @Lob
     // @Lob
     // @Column(name = "archivo")

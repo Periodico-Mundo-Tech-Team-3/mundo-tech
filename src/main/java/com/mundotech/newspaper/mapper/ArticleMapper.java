@@ -42,7 +42,8 @@ public class ArticleMapper {
             new AuthorInfoDto(
                 article.getUser().getId(),
                 article.getUser().getName()
-            )
+            ),
+                article.getImage()
         );
     }
 
