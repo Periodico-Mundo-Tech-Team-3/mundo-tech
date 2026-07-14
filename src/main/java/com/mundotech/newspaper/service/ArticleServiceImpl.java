@@ -87,5 +87,25 @@ public class ArticleServiceImpl implements ArticleService {
         articleAct.setPublishDate(article.publishDate());
         return articleMapper.toArticleInfoDto(articleRepository.save(articleAct));
     }
+
+    @Override
+    public List<ArticleInfoDto> getArticlesByStatus(ArticleStatus status, Integer id) {
+        List<Article> articles;
+        User user = new User();
+        if (id != null) { user = userService.getUserEntityById(id); }
+        switch (status) {
+            case DRAFT -> articles = articleRepository.findByStatusAndUserId(status, user.getId());
+            
+            case IN_REVIEW ->
+                articles = userService.hasRole(userService.getUserEntityById(user.getId()), "manager")
+                    ? articleRepository.findByStatus(status)
+                    : articleRepository.findByStatusAndUserId(status, user.getId());
+            
+            case PUBLISHED -> articles = articleRepository.findByStatus(status);
+        
+            default -> throw new IllegalArgumentException("Estado no soportado: " + status);
+        }
+        return articleMapper.toArticleInfoDtoList(articles);
+    }
 }
 
