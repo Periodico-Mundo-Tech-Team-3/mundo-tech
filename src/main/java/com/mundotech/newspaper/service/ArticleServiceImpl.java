@@ -45,6 +45,8 @@ public class ArticleServiceImpl implements ArticleService {
         newArticle.setStatus(ArticleStatus.DRAFT);
         newArticle.setUser(userService.getUserEntityById(userId));
 
+        //estamos devolviendo ruta relativa, si quieres devolver ruta absoluta, habría que concatenar con la ruta base del servidor
+        //newArticle.setRutaArchivo(fichero.getFileName());
         newArticle.setRutaArchivo(fichero.getPath());
         newArticle.setTipoContenido(fichero.getContentType());
         newArticle.setTamano(fichero.getSize());
