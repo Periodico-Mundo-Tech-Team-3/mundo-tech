@@ -64,5 +64,11 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(int id) {
         User user = getUserEntityById(id);
         userRepository.delete(user);
+    }
+
+    @Override
+    public boolean hasRole(User user, String roleName) {
+        return user.getRoles().stream()
+            .anyMatch(role -> role.getName().equalsIgnoreCase(roleName));
     }    
 }

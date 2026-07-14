@@ -29,7 +29,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ArticleInfoDto createArticle(ArticleDto article, int userId) {
-        if(!userService.getUserEntityById(userId).getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("author"))){
+        if(!userService.hasRole(userService.getUserEntityById(userId), "author")){
             throw new IllegalArgumentException("El usuario no tiene el rol AUTHOR y no puede crear artículos.");
         }
 
