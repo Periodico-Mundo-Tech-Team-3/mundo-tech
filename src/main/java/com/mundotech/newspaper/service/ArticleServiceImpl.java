@@ -90,22 +90,29 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleInfoDto> getArticlesByStatus(ArticleStatus status, Integer id) {
-        List<Article> articles;
-        User user = new User();
-        if (id != null) { user = userService.getUserEntityById(id); }
-        switch (status) {
-            case DRAFT -> articles = articleRepository.findByStatusAndUserId(status, user.getId());
+        validateGetArticleByStatusAction(status, id);
+        List<Article> articles = switch (status) {
+            case DRAFT -> articleRepository.findByStatusAndUserId(status, id);
             
             case IN_REVIEW ->
-                articles = userService.hasRole(userService.getUserEntityById(user.getId()), "manager")
+                userService.hasRole(userService.getUserEntityById(id), "manager")
                     ? articleRepository.findByStatus(status)
-                    : articleRepository.findByStatusAndUserId(status, user.getId());
+                    : articleRepository.findByStatusAndUserId(status, id);
             
-            case PUBLISHED -> articles = articleRepository.findByStatus(status);
+            case PUBLISHED -> articleRepository.findByStatus(status);
         
             default -> throw new IllegalArgumentException("Estado no soportado: " + status);
-        }
+        };
         return articleMapper.toArticleInfoDtoList(articles);
     }
+
+    private void validateGetArticleByStatusAction(ArticleStatus status, Integer userId) {
+    boolean requireStatus = status == ArticleStatus.DRAFT || status == ArticleStatus.IN_REVIEW;
+    if (requireStatus && userId == null) {
+        throw new IllegalArgumentException(
+            "Debe indicarse un usuario (userId) para consultar los artículos en estado " + status);
+        }
+    }
 }
+
 
