@@ -15,4 +15,6 @@ public interface UserService {
     public List<UserInfoDto> getAllUsers();
 
     public void deleteUserById(int id);
+
+    public boolean hasRole(User user, String role);
 }
