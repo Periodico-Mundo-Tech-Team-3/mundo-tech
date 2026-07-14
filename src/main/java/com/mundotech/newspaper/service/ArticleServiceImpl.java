@@ -113,6 +113,23 @@ public class ArticleServiceImpl implements ArticleService {
             "Debe indicarse un usuario (userId) para consultar los artículos en estado " + status);
         }
     }
+
+    @Override
+    public ArticleInfoDto submitArticle(Integer articleId, Integer userId) {
+        Article article = getArticleEntityById(articleId);
+        if (!article.getUser().getId().equals(userId)) {
+            throw new IllegalAccessError(
+                "Solo el autor puede enviar su artículo a revisión."
+            );
+        }
+        if (article.getStatus() != ArticleStatus.DRAFT) {
+            throw new IllegalStateException(
+                "Solo se puede enviar a revisión un artículo en estado DRAFT. Estado actual: " + article.getStatus()
+            );
+        }
+        article.setStatus(ArticleStatus.IN_REVIEW);
+        return articleMapper.toArticleInfoDto(articleRepository.save(article));
+    }
 }
 
 
