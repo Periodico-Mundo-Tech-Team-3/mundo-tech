@@ -82,4 +82,31 @@ public class ArticleController {
         List<ArticleInfoDto> articles = articleService.getArticlesByStatus(status, userId);
         return new ResponseEntity<>(articles, HttpStatus.OK);
     }
+
+    @GetMapping("/{id}/submit")
+    public ResponseEntity<ArticleInfoDto> submitArticle(
+        @PathVariable Integer id,
+        @RequestParam Integer userId) {
+
+        ArticleInfoDto article = articleService.submitArticle(id, userId);
+        return new ResponseEntity<>(article, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/publish")
+    public ResponseEntity<ArticleInfoDto> publishArticle(
+        @PathVariable Integer id,
+        @RequestParam Integer userId) {
+
+        ArticleInfoDto article = articleService.publishArticle(id, userId);
+        return new ResponseEntity<>(article, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/reject")
+    public ResponseEntity<ArticleInfoDto> rejectArticle(
+        @PathVariable Integer id,
+        @RequestParam Integer userId) {
+
+        ArticleInfoDto article = articleService.rejectArticle(id, userId);
+        return new ResponseEntity<>(article, HttpStatus.OK);
+    }
 }
