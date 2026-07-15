@@ -3,6 +3,7 @@ package com.mundotech.newspaper.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mundotech.newspaper.dto.request.ArticleDto;
 import com.mundotech.newspaper.dto.response.ArticleInfoDto;
@@ -30,9 +33,18 @@ public class ArticleController {
         this.articleService = articleservice;
     }
     
-    @PostMapping("/{userId}")
-    ResponseEntity<ArticleInfoDto> createArticle(@Valid @RequestBody ArticleDto articleDto, @PathVariable int userId) {
-        ArticleInfoDto articleInfoDto = articleService.createArticle(articleDto, userId);
+    //  @PostMapping("/{userId}")
+    // ResponseEntity<ArticleInfoDto> createArticle(@Valid @RequestBody ArticleDto articleDto, @PathVariable int userId) {
+    //     ArticleInfoDto articleInfoDto = articleService.createArticle(articleDto, userId);
+    //     return new ResponseEntity<>(articleInfoDto, HttpStatus.CREATED);
+    // }
+
+    //@ModelAttribute → cuando el frontend envía un formulario con campos y un fichero (es lo más común en aplicaciones web).
+    
+    //@RequestPart → cuando el frontend envía un JSON completo + un fichero.
+    @PostMapping(value = "/{userId}" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<ArticleInfoDto> createArticle(@RequestPart("article") @Valid ArticleDto articleDto,@RequestPart("file") MultipartFile file, @PathVariable int userId) {
+        ArticleInfoDto articleInfoDto = articleService.createArticle(articleDto, userId,file);
         return new ResponseEntity<>(articleInfoDto, HttpStatus.CREATED);
     }
 

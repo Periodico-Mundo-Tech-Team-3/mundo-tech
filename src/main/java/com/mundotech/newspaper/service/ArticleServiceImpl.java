@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mundotech.newspaper.dto.request.ArticleDto;
 import com.mundotech.newspaper.dto.response.ArticleInfoDto;
+import com.mundotech.newspaper.dto.response.FileUploadResponseDto;
 import com.mundotech.newspaper.entity.Article;
 import com.mundotech.newspaper.repository.ArticleRepository;
 import com.mundotech.newspaper.entity.ArticleStatus;
@@ -20,23 +22,40 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleRepository articleRepository;
     private final UserService userService;
     private final ArticleMapper articleMapper;
+    private final FileUploadService fileUploadService;
     
-    public ArticleServiceImpl(ArticleRepository articleRepository, UserService userService, ArticleMapper articleMapper) {
+    public ArticleServiceImpl(ArticleRepository articleRepository, UserService userService, ArticleMapper articleMapper, FileUploadService fileUploadService) { 
         this.articleRepository = articleRepository;
         this.userService = userService;
         this.articleMapper = articleMapper;
+        this.fileUploadService = fileUploadService;
     }
 
     @Override
-    public ArticleInfoDto createArticle(ArticleDto article, int userId) {
+    public ArticleInfoDto createArticle(ArticleDto article, int userId, MultipartFile file) {
         if(!userService.hasRole(userService.getUserEntityById(userId), "author")){
             throw new IllegalArgumentException("El usuario no tiene el rol AUTHOR y no puede crear artículos.");
         }
+
+        //los ficheros se suben a la carpeta uploads y se guarda la ruta en la base de datos
+        FileUploadResponseDto fichero = fileUploadService.upload(file);
 
         Article newArticle = articleMapper.toArticleEntity(article);
 
         newArticle.setStatus(ArticleStatus.DRAFT);
         newArticle.setUser(userService.getUserEntityById(userId));
+
+        //estamos devolviendo ruta relativa, si quieres devolver ruta absoluta, habría que concatenar con la ruta base del servidor
+        //newArticle.setRutaArchivo(fichero.getFileName());
+        newArticle.setRutaArchivo(fichero.getPath());
+        newArticle.setTipoContenido(fichero.getContentType());
+        newArticle.setTamano(fichero.getSize());
+        newArticle.setImage(fichero.getFileName());
+
+        //En este caso no necesitarías el FileUploadService para guardar el archivo en disco.
+        //esto seria para guardar el archivo en la base de datos, pero no es recomendable por el tamaño de los archivos
+        //newArticle.setArchivo(file.getBytes());
+
         return articleMapper.toArticleInfoDto(articleRepository.save(newArticle));
     }
 
