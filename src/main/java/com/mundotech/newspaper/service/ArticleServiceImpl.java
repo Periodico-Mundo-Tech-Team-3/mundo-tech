@@ -117,18 +117,37 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleInfoDto submitArticle(Integer articleId, Integer userId) {
         Article article = getArticleEntityById(articleId);
-        if (!article.getUser().getId().equals(userId)) {
-            throw new IllegalAccessError(
-                "Solo el autor puede enviar su artículo a revisión."
-            );
-        }
-        if (article.getStatus() != ArticleStatus.DRAFT) {
-            throw new IllegalStateException(
-                "Solo se puede enviar a revisión un artículo en estado DRAFT. Estado actual: " + article.getStatus()
-            );
-        }
+        
+        validateStatus(article, article.getStatus());
+        validateIsAuthor(article, userId);
+
         article.setStatus(ArticleStatus.IN_REVIEW);
         return articleMapper.toArticleInfoDto(articleRepository.save(article));
+    }
+
+    private void validateStatus(Article article, ArticleStatus expectedStatus) {
+        if (article.getStatus() != expectedStatus) {
+            throw new IllegalStateException(
+                "El artículo debe estar en estado " + expectedStatus +
+                " para esta acción. Estado actual: " + article.getStatus()
+            );
+        }
+    }
+
+    private void validateIsAuthor(Article article, Integer userId) {
+        if (!article.getUser().getId().equals(userId)) {
+            throw new IllegalAccessError(
+                "Solo el autor del artículo puede realizar esta acción."
+            );
+        }
+    }
+
+    private void validateIsManager(Integer userId) {
+        if (!userService.hasRole(userService.getUserEntityById(userId), "manager")) {
+            throw new IllegalAccessError(
+                "Solo un manager puede realizar esta acción."
+            );
+        }
     }
 }
 
