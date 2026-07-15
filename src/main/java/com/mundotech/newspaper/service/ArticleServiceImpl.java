@@ -134,10 +134,18 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public void deleteArticleById(int id, Integer userLoginId) {
+      Article articleAct = getArticleEntityById(id);
+        if (articleAct.getUser() == null || articleAct.getUser().getId() != userLoginId) {
+            throw new RuntimeException("No puedes eliminar un artículo que no es tuyo.");
+        }
+        articleRepository.delete(articleAct);
+    }
+    
     public ArticleInfoDto submitArticle(Integer articleId, Integer userId) {
         Article article = getArticleEntityById(articleId);
         
-        validateStatus(article, article.getStatus());
+        validateStatus(article, ArticleStatus.DRAFT);
         validateIsAuthor(article, userId);
 
         article.setStatus(ArticleStatus.IN_REVIEW);
@@ -147,7 +155,7 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleInfoDto publishArticle(Integer articleId, Integer userId) {
         Article article = getArticleEntityById(articleId);
         
-        validateStatus(article, article.getStatus());
+        validateStatus(article, ArticleStatus.IN_REVIEW);
         validateIsManager(userId);
 
         article.setStatus(ArticleStatus.PUBLISHED);
@@ -157,7 +165,7 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleInfoDto rejectArticle(Integer articleId, Integer userId) {
         Article article = getArticleEntityById(articleId);
         
-        validateStatus(article, article.getStatus());
+        validateStatus(article, ArticleStatus.IN_REVIEW);
         validateIsManager(userId);
 
         article.setStatus(ArticleStatus.DRAFT);
