@@ -41,22 +41,8 @@ public class Article {
     @Enumerated(EnumType.STRING)
     private ArticleStatus status;
 
-    @Column(length = 255)
-    private String rutaArchivo;
-
-    @Column(length = 100)
-    private String tipoContenido;
-
-    @Column
-    private Long tamano;
-
-    @Column(name = "image")
+    @Column(nullable = true)
     private String image;
-
-    //si se guarda el fichero en la base de datos, se debe cambiar el tipo de dato a byte[] y quitar la anotación @Lob
-    // @Lob
-    // @Column(name = "archivo")
-    // private byte[] archivo;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)

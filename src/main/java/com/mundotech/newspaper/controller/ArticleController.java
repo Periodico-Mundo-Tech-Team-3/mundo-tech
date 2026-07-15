@@ -45,7 +45,7 @@ public class ArticleController {
     
     //@RequestPart → cuando el frontend envía un JSON completo + un fichero.
     @PostMapping(value = "/{userId}" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<ArticleInfoDto> createArticle(@RequestPart("article") @Valid ArticleDto articleDto,@RequestPart("file") MultipartFile file, @PathVariable int userId) {
+    ResponseEntity<ArticleInfoDto> createArticle(@RequestPart("article") @Valid ArticleDto articleDto,@RequestPart(value = "file", required = false) MultipartFile file, @PathVariable int userId) {
         ArticleInfoDto articleInfoDto = articleService.createArticle(articleDto, userId,file);
         return new ResponseEntity<>(articleInfoDto, HttpStatus.CREATED);
     }
