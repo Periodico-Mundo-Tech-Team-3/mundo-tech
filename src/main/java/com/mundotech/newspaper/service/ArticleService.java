@@ -2,13 +2,15 @@ package com.mundotech.newspaper.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.mundotech.newspaper.dto.request.ArticleDto;
 import com.mundotech.newspaper.dto.response.ArticleInfoDto;
 import com.mundotech.newspaper.entity.Article;
 import com.mundotech.newspaper.entity.ArticleStatus;
 
 public interface ArticleService {
-    public ArticleInfoDto createArticle(ArticleDto article, int userId);
+    public ArticleInfoDto createArticle(ArticleDto article, int userId, MultipartFile file);
 
     public List<ArticleInfoDto> getAllArticles();
 

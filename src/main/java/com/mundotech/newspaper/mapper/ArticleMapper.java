@@ -21,6 +21,7 @@ public class ArticleMapper {
         article.setTitle(articleDto.title());
         article.setContent(articleDto.content());
         article.setPublishDate(articleDto.publishDate());
+        article.setImage(articleDto.image());
 
         return article;
     }
@@ -34,10 +35,16 @@ public class ArticleMapper {
             article.getContent(),
             article.getPublishDate().toInstant(),
             article.getStatus(),
+            //¿hay que enviar la ruta del archivo, tamaño y tipo de contenido en el DTO de respuesta?
+            //si es así, habría que añadir esos campos en el constructor de ArticleInfoDto y en la clase ArticleInfoDto
+            //article.getRutaArchivo()
+            //article.getTamano(),
+            //article.getTipoContenido(),
             new AuthorInfoDto(
                 article.getUser().getId(),
                 article.getUser().getName()
-            )
+            ),
+                article.getImage()
         );
     }
 

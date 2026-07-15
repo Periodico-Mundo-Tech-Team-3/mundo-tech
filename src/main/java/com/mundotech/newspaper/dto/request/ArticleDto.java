@@ -17,7 +17,8 @@ public record ArticleDto(
     String content,
 
     @NotNull
-    Date publishDate
-) {
+    Date publishDate,
 
-}
+    String image
+
+) {}

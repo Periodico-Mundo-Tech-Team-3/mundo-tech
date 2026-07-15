@@ -2,7 +2,6 @@
 
  import java.time.Instant;
 
-
  import com.mundotech.newspaper.entity.ArticleStatus;
 
 public record ArticleInfoDto(
@@ -11,7 +10,8 @@ public record ArticleInfoDto(
     String content,
     Instant publishDate,
     ArticleStatus status,
-    AuthorInfoDto author
+    AuthorInfoDto author,
+    String image
 ) {
 
     // public record AuthorInfoDto(
