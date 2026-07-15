@@ -50,6 +50,7 @@ public class ArticleServiceImpl implements ArticleService {
         newArticle.setRutaArchivo(fichero.getPath());
         newArticle.setTipoContenido(fichero.getContentType());
         newArticle.setTamano(fichero.getSize());
+        newArticle.setImage(fichero.getFileName());
 
         //En este caso no necesitarías el FileUploadService para guardar el archivo en disco.
         //esto seria para guardar el archivo en la base de datos, pero no es recomendable por el tamaño de los archivos

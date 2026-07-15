@@ -21,6 +21,7 @@ public class ArticleMapper {
         article.setTitle(articleDto.title());
         article.setContent(articleDto.content());
         article.setPublishDate(articleDto.publishDate());
+        article.setImage(articleDto.image());
 
         return article;
     }
