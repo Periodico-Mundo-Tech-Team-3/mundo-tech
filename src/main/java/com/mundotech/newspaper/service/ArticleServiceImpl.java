@@ -37,23 +37,43 @@ public class ArticleServiceImpl implements ArticleService {
             throw new IllegalArgumentException("El usuario no tiene el rol AUTHOR y no puede crear artículos.");
         }
 
-        FileUploadResponseDto fichero = fileUploadService.upload(file);
-
         Article newArticle = articleMapper.toArticleEntity(article);
 
         newArticle.setStatus(ArticleStatus.DRAFT);
         newArticle.setUser(userService.getUserEntityById(userId));
-        newArticle.setImage(fichero.getFileName());
-
+        
+        if (file != null && !file.isEmpty()) {
+            FileUploadResponseDto fichero = fileUploadService.upload(file);
+            newArticle.setImage(fichero.getFileName());
+        }
+        
         return articleMapper.toArticleInfoDto(articleRepository.save(newArticle));
+    }
+
+    @Override
+    public ArticleInfoDto updateArticle(Integer id,Integer userLoginId, ArticleDto article, MultipartFile file) {
+        Article articleAct = getArticleEntityById(id);
+
+        if (articleAct.getUser() == null || !articleAct.getUser().getId().equals(userLoginId)) {
+            throw new RuntimeException("No puedes editar un artículo que no es tuyo.");
+        }
+
+        if (file != null && !file.isEmpty()) {
+            FileUploadResponseDto fichero = fileUploadService.upload(file);
+            articleAct.setImage(fichero.getFileName()); 
+        }
+
+        articleAct.setTitle(article.title());
+        articleAct.setContent(article.content());
+        articleAct.setPublishDate(article.publishDate());
+        
+        return articleMapper.toArticleInfoDto(articleRepository.save(articleAct));
     }
 
     @Override
     public List<ArticleInfoDto> getAllArticles() {
         List<Article> articles = articleRepository.findAll();
-        if(articles.isEmpty()){
-            throw new RuntimeException("No existen articulos");
-        }
+       
         return articleMapper.toArticleInfoDtoList(articles);
     }
 
@@ -84,17 +104,6 @@ public class ArticleServiceImpl implements ArticleService {
         return articleMapper.toArticleInfoDtoList(articleRepository.findByUserId(userId));
     }
 
-    @Override
-    public ArticleInfoDto updateArticle(Integer id,Integer userLoginId, ArticleDto article) {
-        Article articleAct = getArticleEntityById(id);
-        if (articleAct.getUser() == null || articleAct.getUser().getId() != userLoginId) {
-            throw new RuntimeException("No puedes editar un artículo que no es tuyo.");
-        }
-        articleAct.setTitle(article.title());
-        articleAct.setContent(article.content());
-        articleAct.setPublishDate(article.publishDate());
-        return articleMapper.toArticleInfoDto(articleRepository.save(articleAct));
-    }
 
     @Override
     public List<ArticleInfoDto> getArticlesByStatus(ArticleStatus status, Integer id) {
@@ -125,7 +134,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void deleteArticleById(int id, Integer userLoginId) {
       Article articleAct = getArticleEntityById(id);
-        if (articleAct.getUser() == null || articleAct.getUser().getId() != userLoginId) {
+      
+        if (articleAct.getUser() == null || !articleAct.getUser().getId().equals(userLoginId)) {
             throw new RuntimeException("No puedes eliminar un artículo que no es tuyo.");
         }
         articleRepository.delete(articleAct);

@@ -20,7 +20,7 @@ public interface ArticleService {
 
     public List<ArticleInfoDto> getArticlesByUserId(int userId);
 
-    public ArticleInfoDto updateArticle(Integer id,Integer userLoginId, ArticleDto article);
+    public ArticleInfoDto updateArticle(Integer id,Integer userLoginId, ArticleDto article, MultipartFile file);
 
     public List<ArticleInfoDto> getArticlesByStatus(ArticleStatus status, Integer id);
 

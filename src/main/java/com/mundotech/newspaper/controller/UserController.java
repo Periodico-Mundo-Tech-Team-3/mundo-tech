@@ -29,12 +29,8 @@ public class UserController {
             this.userService = userService;
     }
 
-    // @PostMapping
-    // public ResponseEntity<UserInfoDto> createUser(@Valid @RequestBody UserDto userDto, @RequestParam List<Integer> rolesIds){
-    //     User user = userMapper.toUserEntity(userDto);
-    //     UserInfoDto response = userMapper.toUserInfoDto(userService.createUser(user, rolesIds));
-    //     return new ResponseEntity<>(response, HttpStatus.CREATED); 
-    // }
+    //  falta hacer un login user
+    
 
     @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody User user, @RequestParam List<Integer> rolesIds){
