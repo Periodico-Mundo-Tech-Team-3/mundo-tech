@@ -37,24 +37,13 @@ public class ArticleServiceImpl implements ArticleService {
             throw new IllegalArgumentException("El usuario no tiene el rol AUTHOR y no puede crear artículos.");
         }
 
-        //los ficheros se suben a la carpeta uploads y se guarda la ruta en la base de datos
         FileUploadResponseDto fichero = fileUploadService.upload(file);
 
         Article newArticle = articleMapper.toArticleEntity(article);
 
         newArticle.setStatus(ArticleStatus.DRAFT);
         newArticle.setUser(userService.getUserEntityById(userId));
-
-        //estamos devolviendo ruta relativa, si quieres devolver ruta absoluta, habría que concatenar con la ruta base del servidor
-        //newArticle.setRutaArchivo(fichero.getFileName());
-        newArticle.setRutaArchivo(fichero.getPath());
-        newArticle.setTipoContenido(fichero.getContentType());
-        newArticle.setTamano(fichero.getSize());
         newArticle.setImage(fichero.getFileName());
-
-        //En este caso no necesitarías el FileUploadService para guardar el archivo en disco.
-        //esto seria para guardar el archivo en la base de datos, pero no es recomendable por el tamaño de los archivos
-        //newArticle.setArchivo(file.getBytes());
 
         return articleMapper.toArticleInfoDto(articleRepository.save(newArticle));
     }

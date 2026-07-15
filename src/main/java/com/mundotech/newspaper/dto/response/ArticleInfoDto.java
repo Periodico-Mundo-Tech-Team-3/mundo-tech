@@ -13,9 +13,5 @@ public record ArticleInfoDto(
     AuthorInfoDto author,
     String image
 ) {
-
-    // public record AuthorInfoDto(
-    //     Integer id,
-    //     String name
-    // ) {}
+    
 }

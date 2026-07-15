@@ -18,7 +18,7 @@ public record ArticleDto(
 
     @NotNull
     Date publishDate,
-
+    
     String image
 
 ) {}
