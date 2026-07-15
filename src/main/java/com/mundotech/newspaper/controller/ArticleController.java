@@ -41,7 +41,7 @@ public class ArticleController {
     }
 
     @PutMapping(value ="/{id}/{userLoginId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ArticleInfoDto> updateArticle(@PathVariable Integer id,@PathVariable Integer userLoginId,  @RequestPart("article") @Valid ArticleDto article,@RequestPart(value = "file") MultipartFile file) {
+    public ResponseEntity<ArticleInfoDto> updateArticle(@PathVariable Integer id,@PathVariable Integer userLoginId,  @RequestPart("article") @Valid ArticleDto article,@RequestPart(value = "file", required = false) MultipartFile file) {
         ArticleInfoDto articleInfoDto = articleService.updateArticle(id,userLoginId, article,file);
 
         return new ResponseEntity<>(articleInfoDto, HttpStatus.OK);
@@ -77,7 +77,7 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}/{userLoginId}")
-    public ResponseEntity<UserInfoDto> deleteUser(@PathVariable int id,@PathVariable Integer userLoginId) {
+    public ResponseEntity<Void> deleteArticle(@PathVariable int id,@PathVariable Integer userLoginId) {
         articleService.deleteArticleById(id, userLoginId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
