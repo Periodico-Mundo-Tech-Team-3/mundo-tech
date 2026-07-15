@@ -33,7 +33,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ArticleInfoDto createArticle(ArticleDto article, int userId, MultipartFile file) {
-        if(!userService.getUserEntityById(userId).getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("author"))){
+        if(!userService.hasRole(userService.getUserEntityById(userId), "author")){
             throw new IllegalArgumentException("El usuario no tiene el rol AUTHOR y no puede crear artículos.");
         }
 
@@ -106,5 +106,32 @@ public class ArticleServiceImpl implements ArticleService {
         articleAct.setPublishDate(article.publishDate());
         return articleMapper.toArticleInfoDto(articleRepository.save(articleAct));
     }
+
+    @Override
+    public List<ArticleInfoDto> getArticlesByStatus(ArticleStatus status, Integer id) {
+        validateGetArticleByStatusAction(status, id);
+        List<Article> articles = switch (status) {
+            case DRAFT -> articleRepository.findByStatusAndUserId(status, id);
+            
+            case IN_REVIEW ->
+                userService.hasRole(userService.getUserEntityById(id), "manager")
+                    ? articleRepository.findByStatus(status)
+                    : articleRepository.findByStatusAndUserId(status, id);
+            
+            case PUBLISHED -> articleRepository.findByStatus(status);
+        
+            default -> throw new IllegalArgumentException("Estado no soportado: " + status);
+        };
+        return articleMapper.toArticleInfoDtoList(articles);
+    }
+
+    private void validateGetArticleByStatusAction(ArticleStatus status, Integer userId) {
+    boolean requireStatus = status == ArticleStatus.DRAFT || status == ArticleStatus.IN_REVIEW;
+    if (requireStatus && userId == null) {
+        throw new IllegalArgumentException(
+            "Debe indicarse un usuario (userId) para consultar los artículos en estado " + status);
+        }
+    }
 }
+
 

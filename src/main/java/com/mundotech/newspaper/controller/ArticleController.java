@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mundotech.newspaper.dto.request.ArticleDto;
 import com.mundotech.newspaper.dto.response.ArticleInfoDto;
+import com.mundotech.newspaper.entity.ArticleStatus;
 import com.mundotech.newspaper.service.ArticleService;
 
 import jakarta.validation.Valid;
@@ -74,4 +75,12 @@ public class ArticleController {
         return new ResponseEntity<>(articleInfoDto, HttpStatus.OK);
     }
 
+    @GetMapping("/status")
+    public ResponseEntity<List<ArticleInfoDto>> getArticlesByStatus(
+        @RequestParam ArticleStatus status,
+        @RequestParam(required = false) Integer userId) {
+
+        List<ArticleInfoDto> articles = articleService.getArticlesByStatus(status, userId);
+        return new ResponseEntity<>(articles, HttpStatus.OK);
+    }
 }
