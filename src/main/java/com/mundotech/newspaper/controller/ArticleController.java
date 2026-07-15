@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -34,22 +33,19 @@ public class ArticleController {
     public ArticleController(ArticleService articleservice){
         this.articleService = articleservice;
     }
-    
-    //  @PostMapping("/{userId}")
-    // ResponseEntity<ArticleInfoDto> createArticle(@Valid @RequestBody ArticleDto articleDto, @PathVariable int userId) {
-    //     ArticleInfoDto articleInfoDto = articleService.createArticle(articleDto, userId);
-    //     return new ResponseEntity<>(articleInfoDto, HttpStatus.CREATED);
-    // }
-
-    //@ModelAttribute → cuando el frontend envía un formulario con campos y un fichero (es lo más común en aplicaciones web).
-    
-    //@RequestPart → cuando el frontend envía un JSON completo + un fichero.
+     
     @PostMapping(value = "/{userId}" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<ArticleInfoDto> createArticle(@RequestPart("article") @Valid ArticleDto articleDto,@RequestPart(value = "file", required = false) MultipartFile file, @PathVariable int userId) {
         ArticleInfoDto articleInfoDto = articleService.createArticle(articleDto, userId,file);
         return new ResponseEntity<>(articleInfoDto, HttpStatus.CREATED);
     }
 
+    @PutMapping(value ="/{id}/{userLoginId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ArticleInfoDto> updateArticle(@PathVariable Integer id,@PathVariable Integer userLoginId,  @RequestPart("article") @Valid ArticleDto article,@RequestPart(value = "file") MultipartFile file) {
+        ArticleInfoDto articleInfoDto = articleService.updateArticle(id,userLoginId, article,file);
+
+        return new ResponseEntity<>(articleInfoDto, HttpStatus.OK);
+    }
     @GetMapping
     public ResponseEntity<List<ArticleInfoDto>> getAllArticles(){
         List<ArticleInfoDto> listArticleInfoDto = articleService.getAllArticles();
@@ -69,12 +65,7 @@ public class ArticleController {
         return new ResponseEntity<>(listArticleInfoDto, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/{userLoginId}")
-    public ResponseEntity<ArticleInfoDto> updateArticle(@PathVariable Integer id,@PathVariable Integer userLoginId, @Valid @RequestBody ArticleDto article){
-        ArticleInfoDto articleInfoDto = articleService.updateArticle(id,userLoginId, article);
 
-        return new ResponseEntity<>(articleInfoDto, HttpStatus.OK);
-    }
 
     @GetMapping("/status")
     public ResponseEntity<List<ArticleInfoDto>> getArticlesByStatus(

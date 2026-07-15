@@ -28,7 +28,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Override
     public FileUploadResponseDto upload(MultipartFile file) {
 
-        // 1. VALIDACIONES BÁSICAS
+        
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("El archivo está vacío o no ha sido enviado.");
         }
@@ -38,7 +38,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             throw new IllegalArgumentException("Nombre de archivo inválido.");
         }
 
-        // --- VALIDACIÓN DE EXTENSIÓN ---
+        
         String extension = "";
         int lastIndexOf = originalFilename.lastIndexOf(".");
         if (lastIndexOf != -1) {
@@ -51,7 +51,6 @@ public class FileUploadServiceImpl implements FileUploadService {
             );
         }
 
-        // --- VALIDACIÓN DE MIME TYPE ---
         String contentType = file.getContentType();
         if (contentType == null || !ALLOWED_MIME_TYPES.contains(contentType.toLowerCase())) {
             throw new IllegalArgumentException(
@@ -60,7 +59,7 @@ public class FileUploadServiceImpl implements FileUploadService {
         }
 
         try {
-            //String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
+        
             String filename = UUID.randomUUID() + "_" + originalFilename;
 
             Path directory = Paths.get(uploadPath);
