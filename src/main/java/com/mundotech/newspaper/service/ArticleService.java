@@ -25,4 +25,10 @@ public interface ArticleService {
     public List<ArticleInfoDto> getArticlesByStatus(ArticleStatus status, Integer id);
 
     public void deleteArticleById(int id, Integer userLoginId);
+    
+    public ArticleInfoDto submitArticle(Integer articleId, Integer userId);
+
+    public ArticleInfoDto publishArticle(Integer articleId, Integer userId);
+    
+    public ArticleInfoDto rejectArticle(Integer articleId, Integer userId);
 }

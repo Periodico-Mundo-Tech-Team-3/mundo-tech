@@ -140,7 +140,61 @@ public class ArticleServiceImpl implements ArticleService {
             throw new RuntimeException("No puedes eliminar un artículo que no es tuyo.");
         }
         articleRepository.delete(articleAct);
+    }
+    
+    public ArticleInfoDto submitArticle(Integer articleId, Integer userId) {
+        Article article = getArticleEntityById(articleId);
+        
+        validateStatus(article, ArticleStatus.DRAFT);
+        validateIsAuthor(article, userId);
 
+        article.setStatus(ArticleStatus.IN_REVIEW);
+        return articleMapper.toArticleInfoDto(articleRepository.save(article));
+    }
+
+    public ArticleInfoDto publishArticle(Integer articleId, Integer userId) {
+        Article article = getArticleEntityById(articleId);
+        
+        validateStatus(article, ArticleStatus.IN_REVIEW);
+        validateIsManager(userId);
+
+        article.setStatus(ArticleStatus.PUBLISHED);
+        return articleMapper.toArticleInfoDto(articleRepository.save(article));
+    }
+
+    public ArticleInfoDto rejectArticle(Integer articleId, Integer userId) {
+        Article article = getArticleEntityById(articleId);
+        
+        validateStatus(article, ArticleStatus.IN_REVIEW);
+        validateIsManager(userId);
+
+        article.setStatus(ArticleStatus.DRAFT);
+        return articleMapper.toArticleInfoDto(articleRepository.save(article));
+    }
+
+    private void validateStatus(Article article, ArticleStatus expectedStatus) {
+        if (article.getStatus() != expectedStatus) {
+            throw new IllegalStateException(
+                "El artículo debe estar en estado " + expectedStatus +
+                " para esta acción. Estado actual: " + article.getStatus()
+            );
+        }
+    }
+
+    private void validateIsAuthor(Article article, Integer userId) {
+        if (!article.getUser().getId().equals(userId)) {
+            throw new IllegalAccessError(
+                "Solo el autor del artículo puede realizar esta acción."
+            );
+        }
+    }
+
+    private void validateIsManager(Integer userId) {
+        if (!userService.hasRole(userService.getUserEntityById(userId), "manager")) {
+            throw new IllegalAccessError(
+                "Solo un manager puede realizar esta acción."
+            );
+        }
     }
 }
 
