@@ -23,4 +23,6 @@ public interface ArticleService {
     public ArticleInfoDto updateArticle(Integer id,Integer userLoginId, ArticleDto article);
 
     public List<ArticleInfoDto> getArticlesByStatus(ArticleStatus status, Integer id);
+
+    public void deleteArticleById(int id, Integer userLoginId);
 }

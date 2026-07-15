@@ -132,6 +132,16 @@ public class ArticleServiceImpl implements ArticleService {
             "Debe indicarse un usuario (userId) para consultar los artículos en estado " + status);
         }
     }
+
+    @Override
+    public void deleteArticleById(int id, Integer userLoginId) {
+      Article articleAct = getArticleEntityById(id);
+        if (articleAct.getUser() == null || articleAct.getUser().getId() != userLoginId) {
+            throw new RuntimeException("No puedes eliminar un artículo que no es tuyo.");
+        }
+        articleRepository.delete(articleAct);
+
+    }
 }
 
 
