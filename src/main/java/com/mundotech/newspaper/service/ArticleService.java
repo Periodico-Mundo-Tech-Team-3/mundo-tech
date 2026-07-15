@@ -26,4 +26,7 @@ public interface ArticleService {
 
     public ArticleInfoDto submitArticle(Integer articleId, Integer userId);
 
+    public ArticleInfoDto publishArticle(Integer articleId, Integer userId);
+    
+    public ArticleInfoDto rejectArticle(Integer articleId, Integer userId);
 }

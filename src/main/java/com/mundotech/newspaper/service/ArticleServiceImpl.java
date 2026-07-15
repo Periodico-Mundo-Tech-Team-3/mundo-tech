@@ -144,6 +144,26 @@ public class ArticleServiceImpl implements ArticleService {
         return articleMapper.toArticleInfoDto(articleRepository.save(article));
     }
 
+    public ArticleInfoDto publishArticle(Integer articleId, Integer userId) {
+        Article article = getArticleEntityById(articleId);
+        
+        validateStatus(article, article.getStatus());
+        validateIsManager(userId);
+
+        article.setStatus(ArticleStatus.PUBLISHED);
+        return articleMapper.toArticleInfoDto(articleRepository.save(article));
+    }
+
+    public ArticleInfoDto rejectArticle(Integer articleId, Integer userId) {
+        Article article = getArticleEntityById(articleId);
+        
+        validateStatus(article, article.getStatus());
+        validateIsManager(userId);
+
+        article.setStatus(ArticleStatus.DRAFT);
+        return articleMapper.toArticleInfoDto(articleRepository.save(article));
+    }
+
     private void validateStatus(Article article, ArticleStatus expectedStatus) {
         if (article.getStatus() != expectedStatus) {
             throw new IllegalStateException(
