@@ -3,6 +3,7 @@ package com.mundotech.newspaper.service;
 import java.util.List;
 import java.util.Set;
 
+import com.mundotech.newspaper.dto.response.RoleInfoDto;
 import com.mundotech.newspaper.entity.Role;
 
 public interface RoleService {
@@ -11,5 +12,5 @@ public interface RoleService {
 
     public Set<Role> getAllRoles(List<Integer> rolesIds);
 
-    public List<Role> getAllRoles();
+    public List<RoleInfoDto> getAllRoles();
 }
