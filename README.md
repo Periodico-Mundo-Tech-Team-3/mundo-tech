@@ -159,7 +159,7 @@ http://localhost:8080
 |DELETE|`/api/v1/articles/{articleId}/{userId}`|Delete an article if the requesting user is the author.|
 |GET|`/api/v1/articles/{id}/submit?userId={userId}`|Submit article (`DRAFT → IN_REVIEW`).|
 |GET|`/api/v1/articles/{id}/publish?userId={userId}`|Publish article (`IN_REVIEW → PUBLISHED`).|
-|GET|`/api/v1/articles/{id}/reject?userId={userId}`|Reject article (`PUBLISHED → IN_REVIEW`).|
+|GET|`/api/v1/articles/{id}/reject?userId={userId}`|Reject article (`IN_REVIEW → DRAFT`).|
 
 ## 📚 Data Model
 
@@ -171,10 +171,10 @@ http://localhost:8080
 
 ```text
 DRAFT
+  ↓            ↑
+IN_REVIEW or REJECT
   ↓
-IN_REVIEW
-  ↓           ↑
-PUBLISHED or REJECT
+PUBLISHED
 ```
 
 ## 🧪 Testing
