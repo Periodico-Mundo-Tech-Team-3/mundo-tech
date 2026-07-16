@@ -2,6 +2,7 @@ package com.mundotech.newspaper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
@@ -38,8 +39,38 @@ class UserMapperTest {
                       .anyMatch(r -> r.name().equals("author")));
     }
 
+    // ---------- BAD END: entradas nulas ----------
     @Test
     void toUserInfoDto_nullUser_returnsNull() {
         assertNull(mapper.toUserInfoDto(null));
     }
+
+    // ---------- BAD END: usuario sin roles ----------
+
+    // @Test
+    // void toUserInfoDto_userWithoutRoles_mapsEmptyRoleSet() {
+    //     User user = new User();
+    //     user.setId(1);
+    //     user.setName("Ana");
+    //     user.setEmail("ana@b.com");
+    //     user.setRoles(null); // roles nulos
+
+    //     UserInfoDto dto = mapper.toUserInfoDto(user);
+
+    //     assertNull(dto); // OJO: con roles=null el stream lanza NPE, no devuelve null
+    // }
+
+    // ---------- SAD PATH: NPE esperado por diseño (no es bug) ----------
+     @Test
+    void toUserInfoDto_withNullRoles_throwsNullPointerException() {
+        User user = new User();
+        user.setId(1);
+        user.setName("Ana");
+        user.setEmail("ana@b.com");
+        user.setRoles(null);
+
+        assertThrows(NullPointerException.class, () -> mapper.toUserInfoDto(user));
+    }
+
+    
 }
