@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mundotech.newspaper.dto.request.ArticleDto;
 import com.mundotech.newspaper.dto.response.ArticleInfoDto;
-import com.mundotech.newspaper.dto.response.UserInfoDto;
 import com.mundotech.newspaper.entity.ArticleStatus;
 import com.mundotech.newspaper.service.ArticleService;
 
