@@ -13,6 +13,7 @@ erDiagram
         varchar title
         text content
         date publishDate
+        varchar image
         varchar status
         int user_id FK
     }
