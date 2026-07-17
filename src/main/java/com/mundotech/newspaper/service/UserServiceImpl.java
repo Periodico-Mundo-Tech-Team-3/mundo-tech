@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
         return userRepository.save(user);
     }
-
     @Override
     public UserInfoDto getUserById(int id) {
         Optional<User> user = userRepository.findById(id);
