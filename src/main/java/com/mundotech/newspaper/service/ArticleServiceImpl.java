@@ -61,6 +61,8 @@ public class ArticleServiceImpl implements ArticleService {
         if (file != null && !file.isEmpty()) {
             FileUploadResponseDto fichero = fileUploadService.upload(file);
             articleAct.setImage(fichero.getFileName()); 
+        } else {
+            articleAct.setImage(article.image());
         }
 
         articleAct.setTitle(article.title());
